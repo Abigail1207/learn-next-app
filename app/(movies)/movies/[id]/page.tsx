@@ -5,13 +5,20 @@
 // 이제 아이디로 영화의 정보를 가져와야 합니다.
 
 import { Suspense } from "react";
-import MovieInfo from "../../../../components/movie-info";
+import MovieInfo, { getMovie } from "../../../../components/movie-info";
 import MovieVideos from "../../../../components/movie-videos";
+
 interface IParams {
   params: { id: string };
 }
 
-export default async function MovieDetailPage({ params: { id } }: IParams) {
+export async function generateMetadata({ params: { id } }: IParams) {
+  const movie = await getMovie(id);
+  return {
+    title: movie.title,
+  };
+}
+export default async function MovieDetail({ params: { id } }: IParams) {
   return (
     <div>
       <Suspense fallback={<h1>Loading movie info</h1>}>

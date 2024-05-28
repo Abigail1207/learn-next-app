@@ -4,6 +4,7 @@ export const metadata = {
   title: "Homepage",
 };
 
+
 export const API_URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
 import styles from "../../styles/home.module.css";
 
