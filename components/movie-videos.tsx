@@ -1,15 +1,33 @@
-
-// Video만 렌더링하는 component 
-
 import { API_URL } from "../app/(home)/page";
+import styles from "../styles/movie-videos.module.css";
 
-async function getVideos(id:string){
-    await new Promise((resolve) => setTimeout(resolve,5000))
-    const response = await fetch(`${API_URL}/${id}/videos`); // 한번 fetch하고 나서 더이상 로딩이 필요하지 않다. 
-    return response.json();
-} 
+interface Video {
+  id: string;
+  key: string;
+  name: string;
+}
 
-export default async function MovieVideos({id}:{id:string}){
-const videos = await getVideos(id);
-return <h6>{JSON.stringify(videos)}</h6>
+async function getVideos(id: string): Promise<Video[]> {
+  const response = await fetch(`${API_URL}/${id}/videos`);
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+}
+
+export default async function MovieVideos({ id }: { id: string }) {
+  const videos: Video[] = await getVideos(id);
+  return (
+    <div className={styles.container}>
+      {videos.map((video: Video) => (
+        <iframe
+          key={video.id}
+          src={`https://youtube.com/embed/${video.key}`}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          title={video.name}
+        />
+      ))}
+    </div>
+  );
 }

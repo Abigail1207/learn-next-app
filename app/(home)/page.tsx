@@ -1,36 +1,40 @@
-
 import Link from "next/link";
-import Movie from "../../components/movie"
+import Movie from "../../components/movie";
 export const metadata = {
-    title: "Homepage",
-  };
+  title: "Homepage",
+};
 
-  
-  
-  export const API_URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
-  import styles from "../../styles/home.module.css"
+export const API_URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
+import styles from "../../styles/home.module.css";
 
+async function getMovies() {
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
+  const response = await fetch(API_URL); // 첫번째 Fetch만 기억하는것이다. 그래서 로딩이 빠르다. 첫번째 요청에서 fetch된 캐싱된 데이터만 받는것이다.
+  const json = await response.json();
+  return json;
+}
 
-  async function getMovies() {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const response = await fetch(API_URL); // 첫번째 Fetch만 기억하는것이다. 그래서 로딩이 빠르다. 첫번째 요청에서 fetch된 캐싱된 데이터만 받는것이다.
-    const json = await response.json();
-    return json;
-  }
-  
-  export default async function HomePage() {
-    const movies = await getMovies();
-    return <div className={styles.container}>
-    {movies.map((movie) => (
-     <Movie 
-     key={movie.id} 
-     id={movie.id} 
-     poster_path={movie.poster_path}
-     title={movie.title}
-     />
-    ))}
+type Movie = {
+  id: string;
+  poster_path: string;
+  title: string;
+};
+
+export default async function HomePage() {
+  const movies: Movie[] = await getMovies();
+  return (
+    <div className={styles.container}>
+      {movies.map((movie) => (
+        <Movie
+          key={movie.id}
+          id={movie.id}
+          poster_path={movie.poster_path}
+          title={movie.title}
+        />
+      ))}
     </div>
-    }
+  );
+}
 
 /*
     import {useEffect, useState} from "react";
@@ -58,9 +62,9 @@ export const metadata = {
     return <div>{isLoading?"Loading...":JSON.stringfy(movies)}</div>;
     }
 
- */ 
-  
-    /* 
+ */
+
+/* 
 ".json() 메서드는 JSON 응답을 JavaScript 객체 리터럴로 구문분석합니다."라는 문장은 다음을 의미합니다:
 
 response.json() 메서드는 서버에서 받은 JSON 형식의 응답을 JavaScript 객체로 변환합니다.
