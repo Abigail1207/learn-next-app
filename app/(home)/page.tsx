@@ -1,13 +1,12 @@
 import Link from "next/link";
 import Movie from "../../components/movie";
+
 export const metadata = {
   title: "Homepage",
 };
 
-
-export const API_URL = "https://nomad-movies.nomadcoders.workers.dev/movies";
 import styles from "../../styles/home.module.css";
-
+import { API_URL } from "../constants";
 async function getMovies() {
   // await new Promise((resolve) => setTimeout(resolve, 1000));
   const response = await fetch(API_URL); // 첫번째 Fetch만 기억하는것이다. 그래서 로딩이 빠르다. 첫번째 요청에서 fetch된 캐싱된 데이터만 받는것이다.
